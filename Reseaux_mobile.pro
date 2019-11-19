@@ -16,11 +16,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    antenne.cpp \
+    hexagone.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    point.cpp
 
 HEADERS += \
-    mainwindow.h
+    antenne.h \
+    hexagone.h \
+    mainwindow.h \
+    point.h
 
 FORMS += \
     mainwindow.ui
