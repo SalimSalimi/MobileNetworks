@@ -20,13 +20,15 @@ SOURCES += \
     hexagone.cpp \
     main.cpp \
     mainwindow.cpp \
-    point.cpp
+    point.cpp \
+    territoire.cpp
 
 HEADERS += \
     antenne.h \
     hexagone.h \
     mainwindow.h \
-    point.h
+    point.h \
+    territoire.h
 
 FORMS += \
     mainwindow.ui

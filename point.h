@@ -17,7 +17,7 @@ public:
     Point(int x, int y);
      void afficherPoint(std::ostream&);
      void lirePoint(std::istream&);
-     const int distance(const Point &p);
+     int distance(const Point &p);
      int x();
      int y();
      void setX(int x);
@@ -26,7 +26,9 @@ private:
     int d_x;
     int d_y;
 };
-// Si > 0, alors C est à gauche de la droite, si < 0 alors C est à droite, sinon il est sur la droite.
+/* Si > 0, alors C est à gauche de la droite, si < 0 alors C est à droite, sinon il est sur la droite.
 int aGauche(Point a, Point b, Point c);
+
+*/
 
 #endif // POINT_H

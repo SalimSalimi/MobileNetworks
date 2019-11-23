@@ -10,10 +10,11 @@ Point::Point(int x, int y):d_x(x), d_y(y){}
 }
 
  void Point::lirePoint(std::istream& is){
-     std::string poubelle;
-     is >> poubelle >> d_x >> poubelle >> d_y >> poubelle;
+     std::string c;
+
+     is >> c >> d_x >> c >> d_y >> c;
  }
-  const int Point::distance(const Point& p)
+   int Point::distance(const Point& p)
  {
   int dx= p.d_x-d_x;
   int dy=p.d_y-d_y;
@@ -41,8 +42,9 @@ Point::Point(int x, int y):d_x(x), d_y(y){}
      p.lirePoint(is);
      return is;
  }
-
+/*
  int aGauche(Point a, Point b, Point c){
      int d = (b.x()-a.x())*(c.y()-a.y())-(b.y()-a.y())*(c.x()-a.x());
      return d;
  }
+ */
