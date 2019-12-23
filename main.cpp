@@ -11,8 +11,11 @@ void testHexagone()
     Antenne b(Point(1,2),"Mulhouse",12,24);
     Antenne* bf;
     Hexagone h;
-    h.ajouterAntenne(bf);
-    h.afficherSommets();
+    h.calculeSommet1().x();
+    h.calculeSommet1().y();
+
+
+
 
 
 

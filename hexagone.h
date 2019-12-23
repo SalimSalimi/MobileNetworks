@@ -16,7 +16,7 @@ private:
     //tableau d'antenne
     std::vector <Antenne*> d_antennes;
 public:
-    
+
     Hexagone();
     Point centre();
     int rayon();
@@ -28,13 +28,19 @@ public:
      void supprimerAntenne(Antenne *a);
     // ce qui est le plus difficile dans cette classe
     void calculerSommets();
+    Point calculeSommet1();
+    Point calculeSommet2();
+    Point calculeSommet3();
+    Point calculeSommet4();
+    Point calculeSommet5();
+    Point calculeSommet6();
 
     void afficherSommets();
 
     bool contientPoint(Point p);
     //reste a gerer le coloriages des hexagones et leurs zones
 
-    
+
 };
 
 #endif // HEXAGONE_H

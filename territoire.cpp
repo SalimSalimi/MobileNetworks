@@ -5,8 +5,9 @@
 Territoire::Territoire()
 {
     //les mettres en parammetres
-//d_longueur=
-//d_largeur=
+
+d_largeur=600;
+d_longueur= 600;
 }
 void Territoire::setLargeur(int largeur){d_largeur=largeur;}
 void Territoire::setLongeur(int longeur){d_longueur=longeur;}
