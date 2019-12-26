@@ -6,7 +6,7 @@ const double PI = 3.14159265358979323846;
 Hexagone::Hexagone()
 {
     d_centre = Point(90,90);
-    d_rayon = 90;
+    d_rayon = 30;
     calculerSommets();
 }
 

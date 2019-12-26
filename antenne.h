@@ -6,29 +6,34 @@
 
 
 
-class Antenne
+class Antenne :public Point
 {
     friend std::ostream& operator <<(std::ostream &os, Antenne a);
     friend std::istream& operator >>(std::istream &os, Antenne &a);
 private:
     Point d_position;
     std::string d_nom;
-    double d_puissance;
+
     double d_frequence;
-    // rest couleur de l'antenne a gerer
+      double d_puissance;
+    // couleur de l'antenne
+    int d_r,d_g,d_b;
 public:
     Antenne();
-    Antenne(Point position, std::string nom, double puissance, double frequence);
+    Antenne(int x, int y, std::string nom, double puissance, int r , int g,int b);
     void afficherAntenne(std::ostream&);
     void lireAntenne(std::istream&);
-    const Point position();
+
     const std::string nom();
-    const double puissance();
-    const double frequence();
+     double puissance();
+     int r();
+     int g();
+     int b();
     void setNom(std::string nom);
     void setPuissance(double puissance);
     void setFrequence(double frequence);
     void setPosition(Point position);
+
 
 };
 

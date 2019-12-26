@@ -8,8 +8,8 @@
 using namespace  std;
 void testHexagone()
 {
-    Antenne b(Point(1,2),"Mulhouse",12,24);
-    Antenne* bf;
+    //Antenne b(Point(1,2),"Mulhouse",12,24);
+   // Antenne* bf;
     Hexagone h;
     h.calculeSommet1().x();
     h.calculeSommet1().y();
