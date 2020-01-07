@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+
 #include <QApplication>
 #include<iostream>
 #include<antenne.h>
@@ -13,13 +16,6 @@ void testHexagone()
     Hexagone h;
     h.calculeSommet1().x();
     h.calculeSommet1().y();
-
-
-
-
-
-
-
 }
 /*
 void  testAntenne()
@@ -48,14 +44,20 @@ void testPoint()
 
 }
 */
-int main(int argc, char *argv[])
 
-{
+int main(int argc, char *argv[]){
+
     //testPoint();
-    testHexagone();
+    /*testHexagone();
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    return a.exec();
+    */
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+    Hexagone hexagone;
+    hexagone.calculerSommets();
 
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    return app.exec();
 }
