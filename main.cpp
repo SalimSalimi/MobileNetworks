@@ -8,6 +8,12 @@
 #include<antenne.h>
 #include<point.h>
 #include<hexagone.h>
+#include <QGeoPolygon>
+#include <QQmlContext>
+#include <QGeoCoordinate>
+#include <QQmlListProperty>
+#include <QQmlComponent>
+
 using namespace  std;
 void testHexagone()
 {
@@ -53,11 +59,44 @@ int main(int argc, char *argv[]){
     MainWindow w;
     w.show();
     */
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    Hexagone hexagone;
-    hexagone.calculerSommets();
 
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    QGeoPolygon polygon;
+
+    Hexagone hexagone;
+    hexagone.setCentre(Point(47.746, 7.3384));
+    hexagone.setRayon(0.0025);
+    hexagone.calculerSommets();
+    QList<QGeoCoordinate> coordinateList;
+    std::vector<Point> sommets = hexagone.sommets();
+    for (int i = 0; i < sommets.size(); i++){
+        QGeoCoordinate coordinate;
+        coordinate.setLatitude(sommets[i].x());
+        coordinate.setLongitude(sommets[i].y());
+
+        coordinateList.push_front(coordinate);
+
+    }
+    polygon.setPath(coordinateList);
+
+    /*polygon.setPath({{47.746, 7.3383},
+                     {47.74571, 7.33659},
+                     {47.74452, 7.33662},
+                     {47.74453, 7.33821},
+                     {47.74605, 7.33718},
+                     {47.74578,  7.33652}});*/
+
+    engine.rootContext()->setContextProperty("poly", QVariant::fromValue(polygon));
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                         &app, [url](QObject *obj, const QUrl &objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+        }, Qt::QueuedConnection);
+    engine.load(url);
+
     return app.exec();
 }

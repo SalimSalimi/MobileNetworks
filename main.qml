@@ -26,18 +26,18 @@ Window {
         gesture.enabled: true
         gesture.maximumZoomLevelChange: 15
 
-        MapPolygon {
-                color: 'green'
-                path: [
-                    { latitude: 47.74579, longitude: 7.3383 },
-                    { latitude: 47.74571, longitude: 7.33659 },
-                    { latitude: 47.74452, longitude: 7.33662 },
-                    { latitude: 47.74453, longitude: 7.33821 },
-                    { latitude: 47.74605, longitude: 7.33718 },
-                    { latitude: 47.74578, longitude: 7.33652 }
-                ]
+        Repeater {
+            model: 6
+            MapPolygon {
+                        color: "red"
+                        border.color: "green"
+                        border.width: 2
+                        smooth: true
+                        opacity: 0.25
+                        geoShape: poly
             }
-    }
+        }
 
+    }
 
 }

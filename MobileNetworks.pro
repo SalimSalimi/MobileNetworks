@@ -1,6 +1,6 @@
-QT       += core gui quick
+QT       += core gui quick qml
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets positioning
 
 CONFIG += c++11
 

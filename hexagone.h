@@ -10,7 +10,7 @@ private:
     //Centre de Lhexagone
     Point d_centre;
     //taille de Lhexagone
-    int d_rayon;
+    double d_rayon;
     //tableau de sommets
     std::vector <Point> d_sommets;
     //tableau d'antenne
@@ -19,11 +19,11 @@ public:
 
     Hexagone();
     Point centre();
-    int rayon();
+    double rayon();
     std::vector <Antenne*> antennes();
     std::vector<Point> sommets();
     void setCentre(Point centre);
-    void setRayon(int rayon);
+    void setRayon(double rayon);
     void ajouterAntenne(Antenne *a);
      void supprimerAntenne(Antenne *a);
     // ce qui est le plus difficile dans cette classe

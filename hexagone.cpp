@@ -11,7 +11,7 @@ Hexagone::Hexagone()
 }
 
 Point Hexagone::centre(){return d_centre;}
-int Hexagone::rayon(){return d_rayon;}
+double Hexagone::rayon(){return d_rayon;}
 std::vector<Antenne*> Hexagone::antennes()
 {
  return d_antennes;
@@ -21,7 +21,7 @@ std::vector<Point> Hexagone::sommets(){
     return d_sommets;
 }
 void Hexagone::setCentre(Point centre){d_centre=centre;}
-void Hexagone::setRayon(int rayon){d_rayon=rayon;}
+void Hexagone::setRayon(double rayon){d_rayon=rayon;}
 void Hexagone::ajouterAntenne(Antenne *a){d_antennes.push_back(a);}
 void Hexagone::supprimerAntenne(Antenne *a)
 {
