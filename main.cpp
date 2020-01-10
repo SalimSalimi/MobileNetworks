@@ -13,8 +13,46 @@
 #include <QGeoCoordinate>
 #include <QQmlListProperty>
 #include <QQmlComponent>
+#include <QDebug>
 
-using namespace  std;
+using namespace std;
+/*void generateHexagones(QList<QGeoCoordinate> coordinateList){
+    double add = 0;
+    for (int j = 0; j < 4; j++) {
+        Hexagone hexagone;
+        hexagone.setCentre(Point(47.746, 7.3384 + add));
+        hexagone.setRayon(0.0025);
+        hexagone.calculerSommets();
+        std::vector<Point> sommets = hexagone.sommets();
+
+        for (int i = 0; i < sommets.size(); i++){
+            QGeoCoordinate coordinate;
+            coordinate.setLatitude(sommets[i].x());
+            coordinate.setLongitude(sommets[i].y());
+            coordinateList.push_back(coordinate);
+
+        }
+        add += hexagone.rayon()*2;
+    }
+
+}
+*/
+std::vector<Hexagone> generateHexagones(int number){
+    std::vector<Hexagone> listHexagones;
+    double add = 0;
+    for (int i = 0; i < number; i++) {
+        Hexagone hexagone;
+        hexagone.setCentre(Point(47.746, 7.3384 + add));
+        hexagone.setRayon(0.0025);
+        hexagone.calculerSommets();
+
+        listHexagones.push_back(hexagone);
+        add += hexagone.rayon()*2;
+    }
+
+    return listHexagones;
+}
+
 void testHexagone()
 {
     //Antenne b(Point(1,2),"Mulhouse",12,24);
@@ -65,22 +103,12 @@ int main(int argc, char *argv[]){
     QQmlApplicationEngine engine;
 
     QGeoPolygon polygon;
-
-    Hexagone hexagone;
-    hexagone.setCentre(Point(47.746, 7.3384));
-    hexagone.setRayon(0.0025);
-    hexagone.calculerSommets();
     QList<QGeoCoordinate> coordinateList;
-    std::vector<Point> sommets = hexagone.sommets();
-    for (int i = 0; i < sommets.size(); i++){
-        QGeoCoordinate coordinate;
-        coordinate.setLatitude(sommets[i].x());
-        coordinate.setLongitude(sommets[i].y());
 
-        coordinateList.push_front(coordinate);
-
-    }
-    polygon.setPath(coordinateList);
+    vector<Hexagone> listHexagones;
+    listHexagones = generateHexagones(4);
+    //generateHexagones(coordinateList);
+    //polygon.setPath(coordinateList);
 
     /*polygon.setPath({{47.746, 7.3383},
                      {47.74571, 7.33659},
@@ -89,14 +117,56 @@ int main(int argc, char *argv[]){
                      {47.74605, 7.33718},
                      {47.74578,  7.33652}});*/
 
-    engine.rootContext()->setContextProperty("poly", QVariant::fromValue(polygon));
+    /*engine.rootContext()->setContextProperty("poly", QVariant::fromValue(polygon));
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                          &app, [url](QObject *obj, const QUrl &objUrl) {
             if (!obj && url == objUrl)
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
-    engine.load(url);
+    engine.load(url);*/
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QQmlComponent component(&engine,
+            url);
+    QObject *object = component.create();
+    QVariant result;
+    QVariant pointC = 47.746;
+    QVariant pointA = 7.3384;
+    QVariantList listLongitude;
+    QVariantList listLatitude;
 
+
+    for (int i = 0; i < 4 ; i++) {
+        std::vector<Point> sommets = listHexagones[i].sommets();
+
+        for (int i = 0; i < sommets.size(); i++){
+            QGeoCoordinate coordinate;
+            coordinate.setLatitude(sommets[i].x());
+            coordinate.setLongitude(sommets[i].y());
+            coordinateList.push_back(coordinate);
+
+        }
+
+        for(int i = 0 ; i < coordinateList.size(); i++){
+            listLatitude.push_back(coordinateList[i].latitude());
+            listLongitude.push_back(coordinateList[i].longitude());
+        }
+
+        QMetaObject::invokeMethod(object, "addHexagone",
+                                   Q_ARG(QVariant, QVariant::fromValue(listLatitude)), Q_ARG(QVariant, QVariant::fromValue(listLongitude)));
+        listLongitude.clear();
+        listLatitude.clear();
+        coordinateList.clear();
+    }
+
+
+
+    //QString results = result.toString();
+    //cout << "QML return " << results.toStdString();
+
+    /*for (int i=0; i < listLatitude.size() ; i++){
+        QMetaObject::invokeMethod(object, "addMarker",
+                                      Q_ARG(QVariant, listLatitude[i]), Q_ARG(QVariant, listLongitude[i]), Q_ARG(QVariant, listLatitude.size()));
+    }*/
     return app.exec();
 }

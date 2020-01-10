@@ -1,4 +1,4 @@
-QT       += core gui quick qml
+QT       += core gui quick qml positioning location network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets positioning
 
@@ -34,11 +34,13 @@ FORMS += \
     mainwindow.ui
 
 RESOURCES += \
-    main.qml
+    main.qml \
+    hexagone.qml
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    hexagone.qml \
     main.qml

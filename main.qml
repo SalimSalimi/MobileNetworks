@@ -4,6 +4,7 @@ import QtLocation 5.6
 import QtPositioning 5.6
 
 Window {
+    id: window
     width: 512
     height: 512
     visible: true
@@ -18,25 +19,26 @@ Window {
         // }
     }
 
+    function addHexagone(latitude, longitude){
+
+        var component = Qt.createComponent("qrc:///hexagone.qml");
+        var polygon = component.createObject(window);
+
+        for(var i=0; i < latitude.length; i++){
+            var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
+            console.log(coordinate + " iterate:" +i);
+            polygon.addCoordinate(coordinate);
+        }
+        map.addMapItem(polygon);
+    }
+
     Map {
+        id: map
         anchors.fill: parent
         plugin: mapPlugin
         center: QtPositioning.coordinate(47.746, 7.3384) // Mulhouse
         zoomLevel: 14
         gesture.enabled: true
-        gesture.maximumZoomLevelChange: 15
-
-        Repeater {
-            model: 6
-            MapPolygon {
-                        color: "red"
-                        border.color: "green"
-                        border.width: 2
-                        smooth: true
-                        opacity: 0.25
-                        geoShape: poly
-            }
-        }
 
     }
 

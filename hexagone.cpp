@@ -73,19 +73,19 @@ Point Hexagone::calculeSommet6()
 }
 void Hexagone::calculerSommets()
 {
-    Point A(d_rayon*cos(PI/2)+d_centre.x(), d_rayon*sin(PI/2)+d_centre.y());
-    Point B(d_rayon*cos((5*PI)/6)+d_centre.x(), d_rayon*sin((5*PI)/6)+d_centre.y());
-    Point C(d_rayon*cos((-5*PI)/6)+d_centre.x(), d_rayon*sin((-5*PI)/6)+d_centre.y());
-    Point D(d_rayon*cos(-PI/2)+d_centre.x(), d_rayon*sin(-PI/2)+d_centre.y());
-    Point E(d_rayon*cos(-PI/6)+d_centre.x(), d_rayon*sin(-PI/6)+d_centre.y());
-    Point F(d_rayon*cos(PI/6)+d_centre.x(), d_rayon*sin(PI/6)+d_centre.y());
+    Point A = calculeSommet1();
+    Point B = calculeSommet2();
+    Point C = calculeSommet3();
+    Point D = calculeSommet4();
+    Point E = calculeSommet5();
+    Point F = calculeSommet6();
     d_sommets.resize(0);
-    d_sommets.push_back(A);
-    d_sommets.push_back(B);
     d_sommets.push_back(C);
     d_sommets.push_back(D);
     d_sommets.push_back(E);
     d_sommets.push_back(F);
+    d_sommets.push_back(A);
+    d_sommets.push_back(B);
 }
 
 void Hexagone::afficherSommets()
