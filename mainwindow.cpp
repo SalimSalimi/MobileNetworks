@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
+/*
 std::vector<Hexagone> hexagones ;
 std::vector<Hexagone> hexagonesImpaire ;
 QPolygon polygonesPaires[10][10] ;
@@ -38,16 +38,14 @@ std::vector<Antenne *> antennes ;
 void MainWindow::RemplirPaire(){
     Hexagone hfirst;
     hexagones.push_back(hfirst);
-      for (int i=1;i<10;i++) {
-                                     Hexagone hexagone;
-                                     hexagone.setCentre(Point(hexagones[i-1].centre().x()+50,hexagone.centre().y())) ;
-                                     hexagones.push_back(hexagone);
+    for (int i=1;i<10;i++) {
+        Hexagone hexagone;
+        hexagone.setCentre(Point(hexagones[i-1].centre().x()+50,hexagone.centre().y())) ;
+        hexagones.push_back(hexagone);
+        centresPaires[0][i]=hexagone.centre();
+    }
 
-                                      centresPaires[0][i]=hexagone.centre();
-
-                                 }
-
-                               }
+}
 
 //construction
 void MainWindow::RemplirImpaire(){
@@ -302,5 +300,9 @@ painter.setBrush(colorImpaire[i][j]);
 painter.drawPolygon(polygonesImpaire[i][j]);
 
 }
+
 }
+
 }
+*/
+
