@@ -37,12 +37,15 @@ FORMS += \
 
 RESOURCES += \
     main.qml \
-    hexagone.qml
+    hexagone.qml \
+    antenne.qml \
+    marker.png
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    antenne.qml \
     hexagone.qml \
     main.qml

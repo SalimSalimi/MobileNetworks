@@ -25,8 +25,8 @@ public:
     void setCentre(Point centre);
     void setRayon(double rayon);
     void ajouterAntenne(Antenne *a);
-     void supprimerAntenne(Antenne *a);
-    // ce qui est le plus difficile dans cette classe
+    void supprimerAntenne(Antenne *a);
+
     void calculerSommets();
     Point calculeSommet1();
     Point calculeSommet2();
@@ -38,8 +38,7 @@ public:
     void afficherSommets();
 
     bool contientPoint(Point p);
-    //reste a gerer le coloriages des hexagones et leurs zones
-
+    double puissanceRecue(Antenne antenne);
 
 };
 

@@ -26,10 +26,23 @@ Window {
 
         for(var i=0; i < latitude.length; i++){
             var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
-            console.log(coordinate + " iterate:" +i);
+            //console.log(coordinate + " iterate:" +i);
             polygon.addCoordinate(coordinate);
         }
         map.addMapItem(polygon);
+    }
+
+    function addAntenne(latitude, longitude){
+        //console.log("antenne");
+        var component = Qt.createComponent("qrc:///antenne.qml");
+        var antenne = component.createObject(window);
+        //console.log("latitude "+latitude.length);
+        //console.log("latitude "+latitude);
+        //console.log("longitude "+longitude);
+        var coordinate = QtPositioning.coordinate(latitude, longitude);
+        //console.log(coordinate + " iterate:" +i);
+        antenne.coordinate = coordinate;
+        map.addMapItem(antenne);
     }
 
     Map {

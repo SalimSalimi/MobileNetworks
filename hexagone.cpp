@@ -13,7 +13,7 @@ Point Hexagone::centre(){return d_centre;}
 double Hexagone::rayon(){return d_rayon;}
 std::vector<Antenne*> Hexagone::antennes()
 {
- return d_antennes;
+    return d_antennes;
 }
 
 std::vector<Point> Hexagone::sommets(){
@@ -48,7 +48,7 @@ Point Hexagone::calculeSommet2(){
 
     return B;
 
- }
+}
 
 Point Hexagone::calculeSommet3()
 
@@ -130,13 +130,13 @@ void Hexagone::calculerSommets()
     d_sommets.push_back(F);
 
 }
-void Hexagone::afficherSommets()
-{
 
-    for (int i = 0; i < sommets().size(); i++){
-        std::cout << sommets().at(i) << " | ";
-    }
+double Hexagone::puissanceRecue(Antenne antenne){
+    double puissance;
+    Point centreAntenne = Point(antenne.x(), antenne.y());
+    double distance = this->centre().distance(centreAntenne);
+    puissance = antenne.puissance() / (4 * PI * distance * distance);
 
+    return puissance;
 }
-
 
