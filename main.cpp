@@ -55,17 +55,40 @@ int main(int argc, char *argv[]){
         remplirImpaire(remplirPaire(firstPointPaire, numberOfHexagones)[0], numberOfHexagones);
 
         for (int i = 0; i < remplirPaire(firstPointPaire, numberOfHexagones).size(); i++) {
-             listHexagones.push_back(remplirPaire(firstPointPaire, numberOfHexagones)[i]);
-              listHexagones.push_back(remplirImpaire(remplirPaire(firstPointPaire, numberOfHexagones)[0], numberOfHexagones)[i]);
+            listHexagones.push_back(remplirPaire(firstPointPaire, numberOfHexagones)[i]);
+            listHexagones.push_back(remplirImpaire(remplirPaire(firstPointPaire, numberOfHexagones)[0], numberOfHexagones)[i]);
         }
 
     }
     QVariantList listLongitude;
     QVariantList listLatitude;
 
+    vector<Antenne> listAntenne;
+    listAntenne = generateListeAntennes(listHexagones);
+
+    for (int i = 0; i < listAntenne.size(); i++) {
+        QVariant latitude;
+        QVariant longitude;
+        QGeoCoordinate coordinate;
+        coordinate.setLatitude(listAntenne[i].y());
+        coordinate.setLongitude(listAntenne[i].x());
+
+        latitude = coordinate.latitude();
+        longitude = coordinate.longitude();
+
+        QMetaObject::invokeMethod(object, "addAntenne",
+                                  Q_ARG(QVariant, QVariant::fromValue(latitude)), Q_ARG(QVariant, QVariant::fromValue(longitude)));
+
+        //writeJSONFile(listLatitude);
+        listLongitude.clear();
+        listLatitude.clear();
+        coordinateList.clear();
+    }
+
     for (int i = 0; i < listHexagones.size(); i++) {
         std::vector<Point> sommets = listHexagones[i].sommets();
-
+        int r = 58, g=60, b= 36;
+        double opacity = 0.75;
         for (int i = 0; i < sommets.size(); i++){
             QGeoCoordinate coordinate;
             coordinate.setLatitude(sommets[i].y());
@@ -79,29 +102,44 @@ int main(int argc, char *argv[]){
             listLongitude.push_back(coordinateList[i].longitude());
         }
 
+        for (int var = 0; var < listAntenne.size(); ++var) {
+
+            if (i > 0) {
+
+                double puissanceRecue = listHexagones[0].puissanceRecue(listAntenne[var]) * 100;
+                int puissance = puissanceRecue;
+
+                if (puissance >= 100) {
+                    opacity = 0.75;
+                } else if (puissance < 100 && puissance >= 50) {
+                    opacity = 0.65;
+                }else if (puissance < 50 && puissance >= 20) {
+
+                    opacity = 0.55;
+                } else if (puissance < 20 && puissance >=0) {
+                    opacity = 0.1;
+                }
+
+
+                cout << "opacity c++" << opacity << endl;
+                cout << "puissance c++" << puissance<< endl;
+
+            }
+
+            if (listHexagones[i].centre().x() == listAntenne[var].x() && listHexagones[i].centre().y() == listAntenne[var].y()) {
+                r = 88;
+                b = 20;
+                g = 32;
+            }
+        }
+        QVariant qOpacity = opacity;
         QMetaObject::invokeMethod(object, "addHexagone",
-                                   Q_ARG(QVariant, QVariant::fromValue(listLatitude)), Q_ARG(QVariant, QVariant::fromValue(listLongitude)));
-
-        //writeJSONFile(listLatitude);
-        listLongitude.clear();
-        listLatitude.clear();
-        coordinateList.clear();
-    }
-    vector<Antenne> listAntenne;
-    listAntenne = generateListeAntennes(listHexagones);
-    cout << "nombre antenne" <<listAntenne.size();
-    for (int i = 0; i < listAntenne.size(); i++) {
-        QVariant latitude;
-        QVariant longitude;
-        QGeoCoordinate coordinate;
-        coordinate.setLatitude(listAntenne[i].y());
-        coordinate.setLongitude(listAntenne[i].x());
-
-        latitude = coordinate.latitude();
-        longitude = coordinate.longitude();
-
-        QMetaObject::invokeMethod(object, "addAntenne",
-                                   Q_ARG(QVariant, QVariant::fromValue(latitude)), Q_ARG(QVariant, QVariant::fromValue(longitude)));
+                                  Q_ARG(QVariant, QVariant::fromValue(listLatitude)),
+                                  Q_ARG(QVariant, QVariant::fromValue(listLongitude)),
+                                  Q_ARG(QVariant, QVariant::fromValue(r)),
+                                  Q_ARG(QVariant, QVariant::fromValue(g)),
+                                  Q_ARG(QVariant, QVariant::fromValue(b)),
+                                  Q_ARG(QVariant, QVariant::fromValue(qOpacity)));
 
         //writeJSONFile(listLatitude);
         listLongitude.clear();
@@ -131,16 +169,9 @@ void readJSONFile() {
 vector<Antenne> generateListeAntennes(vector<Hexagone> listHexagones){
     vector<Antenne> listAntennes;
     for (int i = 0; i < listHexagones.size(); i++) {
-        if (i%10 == 0) {
-
-            cout <<"x du centre  lhexagone i " <<listHexagones[i].centre().x() << endl;
-         //   cout<<listHexagones[i].centre()<<endl;
+        if (i%30 == 0) {
             Point p = Point(listHexagones[i].centre().x(),listHexagones[i].centre().y());
-            cout<<"le point p x"<<p.x()<<"le point p y"<<p.y()<<endl;
-
-            //;
-            Antenne antenne(p.x(), p.y(),"shit", 400, 5, 6,8);
-            cout <<"x " <<antenne.x() << endl;
+            Antenne antenne(p.x(), p.y(),"shit", 400, 50, 86,38);
             listAntennes.push_back(antenne);
 
         }
@@ -148,3 +179,4 @@ vector<Antenne> generateListeAntennes(vector<Hexagone> listHexagones){
 
     return listAntennes;
 }
+

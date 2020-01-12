@@ -30,6 +30,10 @@ void Antenne::setPuissance(double puissance){d_puissance=puissance;}
 void Antenne::setPosition(Point position){this->d_position=position;}
 void Antenne::setFrequence(double frequence){d_frequence=frequence;}
 
+Point Antenne::position(){
+    return Point(this->x(), this->y());
+};
+
 QJsonObject Antenne::writeAntenneToJSON() {
 
     QJsonObject json;

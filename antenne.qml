@@ -4,12 +4,15 @@ import QtPositioning 5.6
 
 MapQuickItem {
             id: antenne
-            anchorPoint.x: icon.width/4
-            anchorPoint.y: icon.height
+            anchorPoint.x: icon.width * 0.5
+            anchorPoint.y: icon.height * 0.8
             sourceItem: Image {
                     id: icon
                     source: "marker.png"
                     sourceSize.width: 60
                     sourceSize.height: 60
-             }
+
+             }            
+
 }
+

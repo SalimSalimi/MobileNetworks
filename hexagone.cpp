@@ -134,7 +134,7 @@ void Hexagone::calculerSommets()
 double Hexagone::puissanceRecue(Antenne antenne){
     double puissance;
     Point centreAntenne = Point(antenne.x(), antenne.y());
-    double distance = this->centre().distance(centreAntenne);
+    double distance = this->centre().haversineDistance(centreAntenne);
     puissance = antenne.puissance() / (4 * PI * distance * distance);
 
     return puissance;

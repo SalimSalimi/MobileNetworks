@@ -4,7 +4,7 @@ import QtPositioning 5.6
 
 MapPolygon {
             id: marker
-            opacity: 0.3
+            opacity: 0.75
             color: "green"
 
 }

@@ -20,7 +20,7 @@ private:
 public:
     Antenne();
     Antenne(double x, double y, std::string nom, double puissance, int r , int g,int b);
-
+    Point position();
     const std::string nom();
     double puissance();
     int r();
