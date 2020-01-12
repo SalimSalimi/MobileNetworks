@@ -61,22 +61,22 @@ Antenne Antenne::readAntenneFromJSON(QJsonObject json) {
     if (json.contains("nom") && json["nom"].isString())
         nom = json["nom"].toString().toStdString();
 
-    if (json.contains("position") && json["position"].isDouble())
+    if (json.contains("position") && json["position"].isObject())
         position = position.readPointFromJSON(json["position"].toObject());
 
-    if (json.contains("frequence") && json["frequence"].isString())
+    if (json.contains("frequence") && json["frequence"].isDouble())
         frequence = json["frequence"].toDouble();
 
-    if (json.contains("puissance") && json["puissance"].isString())
+    if (json.contains("puissance") && json["puissance"].isDouble())
         puissance = json["puissance"].toDouble();
 
-    if (json.contains("red") && json["red"].isString())
+    if (json.contains("red"))
         r = json["red"].toInt();
 
-    if (json.contains("green") && json["green"].isString())
+    if (json.contains("green"))
         g = json["green"].toInt();
 
-    if (json.contains("blue") && json["blue"].isString())
+    if (json.contains("blue"))
         b = json["blue"].toInt();
 
     Antenne antenne(position.x(), position.y(), nom, puissance, frequence, r, g, b);

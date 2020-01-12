@@ -123,8 +123,21 @@ int main(int argc, char *argv[]){
         listLatitude.clear();
         coordinateList.clear();
     }
-    //Antenne antenne1 = readJSONFile();
-    //cout << "Read from JSON " <<antenne1.nom() << endl;
+    /*vector<Antenne> antenne1 = readJSONFile();
+    cout << "Read from JSON " <<antenne1[0].nom() << endl;
+
+    cout << "Read from JSON " <<antenne1[0].puissance() << endl;
+
+    cout << "Read from JSON " <<antenne1[0].frequence() << endl;
+
+    cout << "Read from JSON " <<antenne1[0].x() << endl;
+
+    cout << "Read from JSON " <<antenne1[0].y() << endl;
+
+    cout << "Read from JSON " <<antenne1[0].r() << endl;
+    cout << "Read from JSON " <<antenne1[0].g() << endl;
+    cout << "Read from JSON " <<antenne1[0].b() << endl;*/
+
     return app.exec();
 }
 
