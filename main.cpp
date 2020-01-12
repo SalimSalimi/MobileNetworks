@@ -16,11 +16,13 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QFile>
+#include <QJsonArray>
 
 using namespace std;
 
-void writeJSONFile(QVariantList);
+void writeJSONFile(vector<Antenne>);
 vector<Antenne> generateListeAntennes(vector<Hexagone>);
+vector<Antenne> readJSONFile();
 
 int main(int argc, char *argv[]){
 
@@ -79,11 +81,12 @@ int main(int argc, char *argv[]){
         QMetaObject::invokeMethod(object, "addAntenne",
                                   Q_ARG(QVariant, QVariant::fromValue(latitude)), Q_ARG(QVariant, QVariant::fromValue(longitude)));
 
-        //writeJSONFile(listLatitude);
         listLongitude.clear();
         listLatitude.clear();
         coordinateList.clear();
     }
+
+    //writeJSONFile(listAntenne);
 
     for (int i = 0; i < listHexagones.size(); i++) {
         std::vector<Point> sommets = listHexagones[i].sommets();
@@ -103,75 +106,79 @@ int main(int argc, char *argv[]){
         }
 
         for (int var = 0; var < listAntenne.size(); ++var) {
-
-            if (i > 0) {
-
-                double puissanceRecue = listHexagones[0].puissanceRecue(listAntenne[var]) * 100;
-                int puissance = puissanceRecue;
-
-                if (puissance >= 100) {
-                    opacity = 0.75;
-                } else if (puissance < 100 && puissance >= 50) {
-                    opacity = 0.65;
-                }else if (puissance < 50 && puissance >= 20) {
-
-                    opacity = 0.55;
-                } else if (puissance < 20 && puissance >=0) {
-                    opacity = 0.1;
-                }
-
-
-                cout << "opacity c++" << opacity << endl;
-                cout << "puissance c++" << puissance<< endl;
-
-            }
-
             if (listHexagones[i].centre().x() == listAntenne[var].x() && listHexagones[i].centre().y() == listAntenne[var].y()) {
                 r = 88;
                 b = 20;
                 g = 32;
             }
         }
-        QVariant qOpacity = opacity;
         QMetaObject::invokeMethod(object, "addHexagone",
                                   Q_ARG(QVariant, QVariant::fromValue(listLatitude)),
                                   Q_ARG(QVariant, QVariant::fromValue(listLongitude)),
                                   Q_ARG(QVariant, QVariant::fromValue(r)),
                                   Q_ARG(QVariant, QVariant::fromValue(g)),
-                                  Q_ARG(QVariant, QVariant::fromValue(b)),
-                                  Q_ARG(QVariant, QVariant::fromValue(qOpacity)));
+                                  Q_ARG(QVariant, QVariant::fromValue(b)));
 
-        //writeJSONFile(listLatitude);
         listLongitude.clear();
         listLatitude.clear();
         coordinateList.clear();
     }
-
+    //Antenne antenne1 = readJSONFile();
+    //cout << "Read from JSON " <<antenne1.nom() << endl;
     return app.exec();
 }
 
 
-/*void writeJSONFile(QVariantList data){
+void writeJSONFile(vector<Antenne> listAntenne){
+
     QFile saveFile(QStringLiteral("save.json"));
 
-        if (!saveFile.open(QIODevice::WriteOnly)) {
-            cout << "Can't opend fild";
-        }
-        QJsonDocument document = QJsonDocument::fromVariant(data);
-        QJsonDocument saveDoc(document);
-        saveFile.write(saveDoc.toJson());
-        cout << "Successfull" << endl;
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        cout << "Can't open fild";
+        cout << "im here bitch" << endl;
+
+    }
+    cout << "im here bitch2" << endl;
+
+    QJsonArray array;
+    for (int i = 0; i < listAntenne.size(); i++) {
+
+        cout << "im here bitch3" << endl;
+        array.push_back(listAntenne[i].writeAntenneToJSON());
+    }
+
+    QJsonDocument document = QJsonDocument(array);
+    QJsonDocument saveDoc(document);
+    saveFile.write(saveDoc.toJson());
+    cout << "Successfull" << endl;
 }
 
-void readJSONFile() {
+vector<Antenne> readJSONFile() {
+    vector<Antenne> listAntennes;
+    QFile loadFile(QStringLiteral("save.json"));
 
-}*/
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        qWarning("Couldn't open save file.");
+    }
+
+    QByteArray saveData = loadFile.readAll();
+
+    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+    QJsonArray array = loadDoc.array();
+    for (int i; i < array.size(); i++) {
+        Antenne antenne;
+        antenne = antenne.readAntenneFromJSON(array.takeAt(i).toObject());
+        listAntennes.push_back(antenne);
+
+    }
+    return listAntennes;
+}
 vector<Antenne> generateListeAntennes(vector<Hexagone> listHexagones){
     vector<Antenne> listAntennes;
     for (int i = 0; i < listHexagones.size(); i++) {
         if (i%30 == 0) {
             Point p = Point(listHexagones[i].centre().x(),listHexagones[i].centre().y());
-            Antenne antenne(p.x(), p.y(),"shit", 400, 50, 86,38);
+            Antenne antenne(p.x(), p.y(),"shit", 400, 400, 50, 86,38);
             listAntennes.push_back(antenne);
 
         }

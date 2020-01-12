@@ -19,10 +19,11 @@ private:
     int d_r,d_g,d_b;
 public:
     Antenne();
-    Antenne(double x, double y, std::string nom, double puissance, int r , int g,int b);
+    Antenne(double x, double y, std::string nom, double puissance, double frequence, int r , int g,int b);
     Point position();
     const std::string nom();
     double puissance();
+    double frequence();
     int r();
     int g();
     int b();
@@ -31,7 +32,7 @@ public:
     void setFrequence(double frequence);
     void setPosition(Point position);
     QJsonObject writeAntenneToJSON();
-    QJsonObject readAntenneFromJSON();
+    Antenne readAntenneFromJSON(QJsonObject json);
 
 };
 
