@@ -1,13 +1,11 @@
 #include "middlewareclass.h"
 #include <QGeoCoordinate>
 
-MiddlewareClass::MiddlewareClass(QObject *parent) : QObject(parent)
-{
+MiddlewareClass::MiddlewareClass(QObject *parent) : QObject(parent) {
 
 }
 
-void MiddlewareClass::readAntennesFromFile(QString filePath)
-{
+void MiddlewareClass::readAntennesFromFile(QString filePath) {
     filePath.remove(0,8);
     filePath.replace("\N","/");
     QVector<Antenne> listAntennes;
@@ -29,7 +27,7 @@ void MiddlewareClass::readAntennesFromFile(QString filePath)
     }
     qWarning("Finish Loading");
     showAntennes(listAntennes);
-
+    this->m_listAntenne = listAntennes;
 }
 
 void MiddlewareClass::setListLongitude(QVariantList listLongitude)

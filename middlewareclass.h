@@ -33,7 +33,7 @@ signals:
 private:
     QVariantList m_listLongitude;
     QVariantList m_listLatitude;
-
+    QVector<Antenne> m_listAntenne;
 };
 
 #endif // MIDDLEWARECLASS_H

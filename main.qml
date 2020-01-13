@@ -17,37 +17,6 @@ Window {
         name: "osm"
     }
 
-    function addHexagone(latitude, longitude, r, g, b, centreLong, centreLat){
-
-        var component = Qt.createComponent("qrc:///hexagone.qml");
-        var polygon = component.createObject(window);
-        for(var i=0; i < latitude.length; i++){
-            var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
-            polygon.addCoordinate(coordinate);
-            polygon.color =  "#" + r + b+ g;
-            polygon.centerLatitude = centreLat
-            polygon.centerLongitude = centreLong
-            console.log("test :" + polygon.test);
-            listHexagones.push(polygon);
-        }
-        map.addMapItem(polygon);
-    }
-
-    function addAntenne(){
-
-        var latitude = middleware.listLatitude;
-        var longitude = middleware.listLongitude;
-        console.log(latitude.length);
-        for (var i = 0; i < latitude.length; i++){
-            var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
-            var component = Qt.createComponent("qrc:///antenne.qml");
-            var antenne = component.createObject(window);
-
-            antenne.coordinate = coordinate;
-            map.addMapItem(antenne);
-        }
-    }
-
     Map {
         id: map
         anchors.fill: parent
@@ -68,9 +37,53 @@ Window {
         }
         onRejected: {
             console.log("Canceled")
-            Qt.quit()
         }
         Component.onCompleted: visible = true
     }
 
+
+    function addHexagone(latitude, longitude, r, g, b, centreLong, centreLat){
+
+        var component = Qt.createComponent("qrc:///hexagone.qml");
+        var polygon = component.createObject(window);
+        for(var i=0; i < latitude.length; i++){
+            var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
+            polygon.addCoordinate(coordinate);
+            polygon.color =  "#" + r + b+ g;
+            polygon.centerLatitude = centreLat
+            polygon.centerLongitude = centreLong
+            listHexagones.push(polygon);
+        }
+        console.log("List hexagones " + listHexagones);
+        map.addMapItem(polygon);
+    }
+
+    function addAntenne(){
+        var latitude = middleware.listLatitude;
+        var longitude = middleware.listLongitude;
+
+        for (var i = 0; i < latitude.length; i++){
+            var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
+            var component = Qt.createComponent("qrc:///antenne.qml");
+            var antenne = component.createObject(window);
+
+            antenne.coordinate = coordinate;
+            map.addMapItem(antenne);
+        }
+        changeColorHexagone();
+    }
+
+    function changeColorHexagone(){
+        var latitude = middleware.listLatitude;
+        var longitude = middleware.listLongitude;
+
+        for(var i = 0; i < listHexagones.length; i++){
+            for (var j=0; j < latitude.length; j++){
+                if(listHexagones[i].centerLatitude == latitude[j] && listHexagones[i].centerLongitude == longitude[j]){
+
+                    listHexagones[i].color = "green";
+                }
+            }
+        }
+    }
 }
