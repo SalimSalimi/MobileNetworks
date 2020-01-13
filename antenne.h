@@ -5,10 +5,7 @@
 #include "point.h"
 #include <iostream>
 
-
-
-class Antenne :public Point
-{
+class Antenne :public Point{
 private:
     Point d_position;
     std::string d_nom;
@@ -33,7 +30,6 @@ public:
     void setPosition(Point position);
     QJsonObject writeAntenneToJSON();
     Antenne readAntenneFromJSON(QJsonObject json);
-
 };
 
 #endif // ANTENNE_H

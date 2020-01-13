@@ -31,15 +31,19 @@ Window {
         map.addMapItem(polygon);
     }
 
-    function addAntenne(latitude, longitude){
-        var component = Qt.createComponent("qrc:///antenne.qml");
-        var antenne = component.createObject(window);
+    function addAntenne(){
 
-        var coordinate = QtPositioning.coordinate(latitude, longitude);
-        antenne.coordinate = coordinate;
+        var latitude = middleware.listLatitude;
+        var longitude = middleware.listLongitude;
+        console.log(latitude.length);
+        for (var i = 0; i < latitude.length; i++){
+            var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
+            var component = Qt.createComponent("qrc:///antenne.qml");
+            var antenne = component.createObject(window);
 
-        map.addMapItem(antenne);
-
+            antenne.coordinate = coordinate;
+            map.addMapItem(antenne);
+        }
     }
 
     Map {
@@ -50,6 +54,21 @@ Window {
         zoomLevel: 14
         gesture.enabled: true
 
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Please choose a file"
+        folder: shortcuts.home
+        onAccepted: {
+            console.log("You chose: " + fileDialog.fileUrls)
+            middleware.readAntennesFromFile(fileDialog.fileUrl);
+        }
+        onRejected: {
+            console.log("Canceled")
+            Qt.quit()
+        }
+        Component.onCompleted: visible = true
     }
 
 }

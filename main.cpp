@@ -8,6 +8,7 @@
 #include<antenne.h>
 #include<point.h>
 #include<hexagone.h>
+#include<middlewareclass.h>
 #include <QGeoPolygon>
 #include <QQmlContext>
 #include <QGeoCoordinate>
@@ -29,9 +30,12 @@ int main(int argc, char *argv[]){
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+    MiddlewareClass *middleware = new MiddlewareClass();
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QQmlComponent component(&engine, url);
     QObject *object = component.create();
+    middleware->m_obect = object;
+    engine.rootContext()->setContextProperty("middleware", middleware);
 
     QGeoPolygon polygon;
     QList<QGeoCoordinate> coordinateList;
@@ -68,26 +72,6 @@ int main(int argc, char *argv[]){
     vector<Antenne> listAntenne;
     listAntenne = generateListeAntennes(listHexagones);
 
-    for (int i = 0; i < listAntenne.size(); i++) {
-        QVariant latitude;
-        QVariant longitude;
-        QGeoCoordinate coordinate;
-        coordinate.setLatitude(listAntenne[i].y());
-        coordinate.setLongitude(listAntenne[i].x());
-
-        latitude = coordinate.latitude();
-        longitude = coordinate.longitude();
-
-        QMetaObject::invokeMethod(object, "addAntenne",
-                                  Q_ARG(QVariant, QVariant::fromValue(latitude)), Q_ARG(QVariant, QVariant::fromValue(longitude)));
-
-        listLongitude.clear();
-        listLatitude.clear();
-        coordinateList.clear();
-    }
-
-    //writeJSONFile(listAntenne);
-
     for (int i = 0; i < listHexagones.size(); i++) {
         std::vector<Point> sommets = listHexagones[i].sommets();
         int r = 58, g=60, b= 36;
@@ -123,20 +107,6 @@ int main(int argc, char *argv[]){
         listLatitude.clear();
         coordinateList.clear();
     }
-    /*vector<Antenne> antenne1 = readJSONFile();
-    cout << "Read from JSON " <<antenne1[0].nom() << endl;
-
-    cout << "Read from JSON " <<antenne1[0].puissance() << endl;
-
-    cout << "Read from JSON " <<antenne1[0].frequence() << endl;
-
-    cout << "Read from JSON " <<antenne1[0].x() << endl;
-
-    cout << "Read from JSON " <<antenne1[0].y() << endl;
-
-    cout << "Read from JSON " <<antenne1[0].r() << endl;
-    cout << "Read from JSON " <<antenne1[0].g() << endl;
-    cout << "Read from JSON " <<antenne1[0].b() << endl;*/
 
     return app.exec();
 }
@@ -166,26 +136,6 @@ void writeJSONFile(vector<Antenne> listAntenne){
     cout << "Successfull" << endl;
 }
 
-vector<Antenne> readJSONFile() {
-    vector<Antenne> listAntennes;
-    QFile loadFile(QStringLiteral("save.json"));
-
-    if (!loadFile.open(QIODevice::ReadOnly)) {
-        qWarning("Couldn't open save file.");
-    }
-
-    QByteArray saveData = loadFile.readAll();
-
-    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
-    QJsonArray array = loadDoc.array();
-    for (int i; i < array.size(); i++) {
-        Antenne antenne;
-        antenne = antenne.readAntenneFromJSON(array.takeAt(i).toObject());
-        listAntennes.push_back(antenne);
-
-    }
-    return listAntennes;
-}
 vector<Antenne> generateListeAntennes(vector<Hexagone> listHexagones){
     vector<Antenne> listAntennes;
     for (int i = 0; i < listHexagones.size(); i++) {

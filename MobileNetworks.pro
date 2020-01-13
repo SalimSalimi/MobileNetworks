@@ -21,6 +21,7 @@ SOURCES += \
     hexagone.cpp \
     main.cpp \
     mainwindow.cpp \
+    middlewareclass.cpp \
     point.cpp \
     territoire.cpp
 
@@ -29,6 +30,7 @@ HEADERS += \
     antenne.h \
     hexagone.h \
     mainwindow.h \
+    middlewareclass.h \
     point.h \
     territoire.h
 
