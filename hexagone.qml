@@ -6,25 +6,24 @@ MapPolygon {
             id: marker
             opacity: 0.75
             color: "green"
-
+            property var centerLatitude
+            property var centerLongitude
             MouseArea{
                 id: mouse
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-                //property var coordinate: parent.parent.toCoordinate(Qt.point(mouseX, mouseY))
                 onClicked: {
-                    //console.log(coordinate);
-                    //addAntenne(coordinate);
+                    addAntenne(centerLatitude, centerLongitude);
                 }
             }
 
 
-    function addAntenne(coordinateArea){
+    function addAntenne(centerLatitude, centerLongitude){
                 var component = Qt.createComponent("qrc:///antenne.qml");
                 var antenne = component.createObject(window);
 
-                var coordinate = QtPositioning.coordinate(coordinateArea);
-                antenne.coordinate = coordinateArea;
+                var coordinate = QtPositioning.coordinate(centerLatitude, centerLongitude);
+                antenne.coordinate = coordinate;
                 console.log(antenne.coordinate);
                 map.addMapItem(antenne);
 

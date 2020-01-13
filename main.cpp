@@ -101,7 +101,9 @@ int main(int argc, char *argv[]){
                                   Q_ARG(QVariant, QVariant::fromValue(listLongitude)),
                                   Q_ARG(QVariant, QVariant::fromValue(r)),
                                   Q_ARG(QVariant, QVariant::fromValue(g)),
-                                  Q_ARG(QVariant, QVariant::fromValue(b)));
+                                  Q_ARG(QVariant, QVariant::fromValue(b)),
+                                  Q_ARG(QVariant, QVariant::fromValue(listHexagones[i].centre().x())),
+                                  Q_ARG(QVariant, QVariant::fromValue(listHexagones[i].centre().y())));
 
         listLongitude.clear();
         listLatitude.clear();
@@ -118,15 +120,11 @@ void writeJSONFile(vector<Antenne> listAntenne){
 
     if (!saveFile.open(QIODevice::WriteOnly)) {
         cout << "Can't open fild";
-        cout << "im here bitch" << endl;
-
     }
-    cout << "im here bitch2" << endl;
 
     QJsonArray array;
     for (int i = 0; i < listAntenne.size(); i++) {
 
-        cout << "im here bitch3" << endl;
         array.push_back(listAntenne[i].writeAntenneToJSON());
     }
 

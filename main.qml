@@ -17,7 +17,7 @@ Window {
         name: "osm"
     }
 
-    function addHexagone(latitude, longitude, r, g, b){
+    function addHexagone(latitude, longitude, r, g, b, centreLong, centreLat){
 
         var component = Qt.createComponent("qrc:///hexagone.qml");
         var polygon = component.createObject(window);
@@ -25,7 +25,9 @@ Window {
             var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
             polygon.addCoordinate(coordinate);
             polygon.color =  "#" + r + b+ g;
-
+            polygon.centerLatitude = centreLat
+            polygon.centerLongitude = centreLong
+            console.log("test :" + polygon.test);
             listHexagones.push(polygon);
         }
         map.addMapItem(polygon);
