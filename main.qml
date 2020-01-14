@@ -46,12 +46,13 @@ Window {
 
         var component = Qt.createComponent("qrc:///hexagone.qml");
         var polygon = component.createObject(window);
+        var centreCoordinate = QtPositioning.coordinate(centreLat, centreLong);
+
         for(var i=0; i < latitude.length; i++){
             var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
             polygon.addCoordinate(coordinate);
             polygon.color =  "#" + r + b+ g;
-            polygon.centerLatitude = centreLat
-            polygon.centerLongitude = centreLong
+            polygon.coordinate = centreCoordinate;
             listHexagones.push(polygon);
         }
         map.addMapItem(polygon);
@@ -81,10 +82,9 @@ Window {
         var puissanceRecueMax;
         var positionAntenne = 0;
         for(var i = 0; i < listHexagones.length; i++){
-            var coordinate = QtPositioning.coordinate(listHexagones[i].centerLatitude+0.005, listHexagones[i].centerLongitude+0.005);
             var puissanceRecueAncienne = 0;
             for(var j=0; j < listAntennes.length; j++){
-                var puissanceRecue = 4000 / (4 * Math.PI * (coordinate.distanceTo(listAntennes[j].coordinate)));
+                var puissanceRecue = 400000 / (4 * Math.PI * (listHexagones[i].coordinate.distanceTo(listAntennes[j].coordinate)))*1000;
                 if(puissanceRecue > puissanceRecueAncienne){
 
                     puissanceRecueAncienne = puissanceRecue;
@@ -93,8 +93,13 @@ Window {
                 }
             }
             listHexagones[i].color = listAntennes[positionAntenne].couleur;
-            //listHexagones[i].opacity = 0.75 * puissanceRecue / 4000;
-            console.log("recu " + i +" " + puissanceRecue + " max: " + 4000 +" position " + positionAntenne);
+            listHexagones[i].opacity = 0.75 * puissanceRecueAncienne / 40000;
+            //console.log("opacity" + listHexagones[i].opacity);
+            //console.log("recu " + i +" " + puissanceRecue + " max: " + 4000 +" position " + positionAntenne);
         }
+    }
+
+    function test(){
+        console.log("Tessst");
     }
 }

@@ -94,7 +94,7 @@ int main(int argc, char *argv[]){
                                   Q_ARG(QVariant, QVariant::fromValue(b)),
                                   Q_ARG(QVariant, QVariant::fromValue(listHexagones[i].centre().x())),
                                   Q_ARG(QVariant, QVariant::fromValue(listHexagones[i].centre().y())));
-
+        //cout << "centre x" <<listHexagones[i].centre().x() << endl;
         listLongitude.clear();
         listLatitude.clear();
         coordinateList.clear();
