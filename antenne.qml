@@ -6,6 +6,9 @@ MapQuickItem {
             id: antenne
             anchorPoint.x: icon.width * 0.5
             anchorPoint.y: icon.height * 0.8
+            property var puissance
+            property var frequence
+            property var couleur
             sourceItem: Image {
                     id: icon
                     source: "marker.png"

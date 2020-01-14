@@ -69,9 +69,6 @@ int main(int argc, char *argv[]){
     QVariantList listLongitude;
     QVariantList listLatitude;
 
-    vector<Antenne> listAntenne;
-    listAntenne = generateListeAntennes(listHexagones);
-
     for (int i = 0; i < listHexagones.size(); i++) {
         std::vector<Point> sommets = listHexagones[i].sommets();
         int r = 58, g=60, b= 36;
@@ -89,13 +86,6 @@ int main(int argc, char *argv[]){
             listLongitude.push_back(coordinateList[i].longitude());
         }
 
-        for (int var = 0; var < listAntenne.size(); ++var) {
-            if (listHexagones[i].centre().x() == listAntenne[var].x() && listHexagones[i].centre().y() == listAntenne[var].y()) {
-                r = 88;
-                b = 20;
-                g = 32;
-            }
-        }
         QMetaObject::invokeMethod(object, "addHexagone",
                                   Q_ARG(QVariant, QVariant::fromValue(listLatitude)),
                                   Q_ARG(QVariant, QVariant::fromValue(listLongitude)),
@@ -139,7 +129,10 @@ vector<Antenne> generateListeAntennes(vector<Hexagone> listHexagones){
     for (int i = 0; i < listHexagones.size(); i++) {
         if (i%30 == 0) {
             Point p = Point(listHexagones[i].centre().x(),listHexagones[i].centre().y());
-            Antenne antenne(p.x(), p.y(),"shit", 400, 400, 50, 86,38);
+            int r = rand()%100;
+            int g = rand()%100;
+            int b = rand()%100;
+            Antenne antenne(p.x(), p.y(),"shit", 400, 400, r, g, b);
             listAntennes.push_back(antenne);
 
         }

@@ -7,6 +7,7 @@ MapPolygon {
     opacity: 0.75
     property var centerLatitude
     property var centerLongitude
+    property var antenne
     MouseArea{
         id: mouse
         anchors.fill: parent

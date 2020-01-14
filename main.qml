@@ -11,7 +11,7 @@ Window {
     height: 512
     visible: true
     property var listHexagones: []
-
+    property var listAntennes: []
     Plugin {
         id: mapPlugin
         name: "osm"
@@ -54,36 +54,47 @@ Window {
             polygon.centerLongitude = centreLong
             listHexagones.push(polygon);
         }
-        console.log("List hexagones " + listHexagones);
         map.addMapItem(polygon);
     }
 
     function addAntenne(){
         var latitude = middleware.listLatitude;
         var longitude = middleware.listLongitude;
+        var puissance = middleware.listPuissance;
+        var frequence = middleware.listFrequence;
+        var color = middleware.listColor;
 
         for (var i = 0; i < latitude.length; i++){
             var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
             var component = Qt.createComponent("qrc:///antenne.qml");
             var antenne = component.createObject(window);
-
             antenne.coordinate = coordinate;
+            antenne.puissance = puissance[i];
+            antenne.couleur = color[i];
+            listAntennes.push(antenne);
             map.addMapItem(antenne);
         }
-        changeColorHexagone();
+        assignAntenneToHexagone();
     }
 
-    function changeColorHexagone(){
-        var latitude = middleware.listLatitude;
-        var longitude = middleware.listLongitude;
-
+    function assignAntenneToHexagone(){
+        var puissanceRecueMax;
+        var positionAntenne = 0;
         for(var i = 0; i < listHexagones.length; i++){
-            for (var j=0; j < latitude.length; j++){
-                if(listHexagones[i].centerLatitude == latitude[j] && listHexagones[i].centerLongitude == longitude[j]){
+            var coordinate = QtPositioning.coordinate(listHexagones[i].centerLatitude+0.005, listHexagones[i].centerLongitude+0.005);
+            var puissanceRecueAncienne = 0;
+            for(var j=0; j < listAntennes.length; j++){
+                var puissanceRecue = 4000 / (4 * Math.PI * (coordinate.distanceTo(listAntennes[j].coordinate)));
+                if(puissanceRecue > puissanceRecueAncienne){
 
-                    listHexagones[i].color = "green";
+                    puissanceRecueAncienne = puissanceRecue;
+                    positionAntenne = j;
+
                 }
             }
+            listHexagones[i].color = listAntennes[positionAntenne].couleur;
+            //listHexagones[i].opacity = 0.75 * puissanceRecue / 4000;
+            console.log("recu " + i +" " + puissanceRecue + " max: " + 4000 +" position " + positionAntenne);
         }
     }
 }
