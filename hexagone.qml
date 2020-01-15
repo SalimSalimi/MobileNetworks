@@ -19,6 +19,7 @@ MapPolygon {
         acceptedButtons: "RightButton"
         hoverEnabled: true
         onClicked: {
+
             dialog = showDialogAdd()
             dialog.visible = true
         }
@@ -43,8 +44,8 @@ MapPolygon {
         var component = Qt.createComponent("qrc:///add_antenne_dialog.qml");
         var dialog = component.createObject(window);
         dialog.label = "Ajouter une antenne"
+        dialog.update = "0"
         dialog.getCoordinate(coordinate.latitude, coordinate.longitude);
-
         return dialog
     }
 }

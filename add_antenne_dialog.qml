@@ -9,12 +9,14 @@ Window {
     id: addWindow
     width: 512
     height: 512
+    property var antennePos
     property var couleur
     property var puissance
     property var frequence
     property var nom
     property var coordinate
     property var label
+    property var update
 
     Rectangle {
         id: rectangle
@@ -38,18 +40,19 @@ Window {
 
             TextField {
                 id: txtNom
-                text: qsTr("")
+                text: nom
                 placeholderText: "Nom de l'antenne"
             }
 
             TextField {
                 id: txtPuissance
-                text: qsTr("")
+                text: puissance
                 placeholderText: "Puissance de l'antenne"
             }
 
             TextField {
                 id: txtFrequence
+                text: frequence
                 placeholderText: "Fréquence de l'antenne"
             }
 
@@ -65,13 +68,22 @@ Window {
                 id: addBtn
                 text: qsTr("Confirmer")
                 onClicked: {
+                    if(label == "Ajouter une antenne"){
+                        nom = txtNom.text
+                        puissance = Number(txtPuissance.text)
+                        frequence = Number(txtFrequence.text)
+                        addAntenneDialog()
+                        assignAntenneToHexagone();
+                        addWindow.close()
+                    } else if(label == "Modifier une antenne"){
+                        var antenne = listAntennes[antennePos];
+                        antenne.nom = txtNom.text
+                        antenne.puissance = Number(txtPuissance.text)
+                        antenne.frequence = Number(txtFrequence.text)
+                        listAntennes[antennePos] = antenne
+                    }
 
-                    nom = txtNom.text
-                    puissance = Number(txtPuissance.text)
-                    frequence = Number(txtFrequence.text)
-                    addAntenneDialog()
-                    assignAntenneToHexagone();
-                    addWindow.close()
+
                 }
             }
 
