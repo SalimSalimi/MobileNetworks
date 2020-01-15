@@ -23,7 +23,13 @@ public:
     explicit MiddlewareClass(QObject *parent = nullptr);
 
     QObject* m_obect;
+
+    Q_INVOKABLE void saveAntennesToFile(QString filePath);
     Q_INVOKABLE void readAntennesFromFile(QString filePath);
+    Q_INVOKABLE void constructListAntennes(QVariant puissance, QVariant frequence,
+                                        QVariant coordinateLatitude, QVariant coordinateLongitude,
+                                        QVariant couleur, QVariant nom);
+
 
     void setListLongitude(QVariantList listLongitude);
     void setListLatitude(QVariantList listLatitude);

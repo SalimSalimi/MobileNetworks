@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtLocation 5.6
 import QtPositioning 5.6
+import QtQuick.Controls 2.5
 
 MapQuickItem {
             id: antenne
@@ -9,6 +10,8 @@ MapQuickItem {
             property var puissance
             property var frequence
             property var couleur
+            property var nom
+
             sourceItem: Image {
                     id: icon
                     source: "marker.png"
@@ -17,5 +20,21 @@ MapQuickItem {
 
              }            
 
+            MouseArea {
+                id: mouseA
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                id: toolTip
+                text: textAntenneToolTip()
+                delay: 1000
+                visible: mouseA.containsMouse
+            }
+
+            function textAntenneToolTip() {
+                return "Nom de l'antenne " + this.nom +"\nPuissance de l'antenne:" +this.puissance + "\nFréquence de l'antenne"+this.frequence
+            }
 }
 

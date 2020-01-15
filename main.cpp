@@ -18,18 +18,19 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QJsonArray>
+#include <QQuickStyle>
 
 using namespace std;
 
-void writeJSONFile(vector<Antenne>);
-vector<Antenne> generateListeAntennes(vector<Hexagone>);
-vector<Antenne> readJSONFile();
-
 int main(int argc, char *argv[]){
+
+    const int numberOfHexagones = 20;
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    QQuickStyle::setStyle("Material");
     MiddlewareClass *middleware = new MiddlewareClass();
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QQmlComponent component(&engine, url);
@@ -37,15 +38,12 @@ int main(int argc, char *argv[]){
     middleware->m_obect = object;
     engine.rootContext()->setContextProperty("middleware", middleware);
 
-    QGeoPolygon polygon;
     QList<QGeoCoordinate> coordinateList;
-    int numberOfHexagones = 20;
 
     vector<Hexagone> listHexagones;
     vector<Hexagone> listHexagonesImpaires;
     vector<Hexagone> listHeaxgonesPaires;
 
-    Antenne antenne;
     listHexagones = remplirPaire(Point(7.3384, 47.746), numberOfHexagones);
     listHexagonesImpaires = remplirImpaire(listHexagones[0], numberOfHexagones);
 
@@ -103,41 +101,4 @@ int main(int argc, char *argv[]){
     return app.exec();
 }
 
-
-void writeJSONFile(vector<Antenne> listAntenne){
-
-    QFile saveFile(QStringLiteral("save.json"));
-
-    if (!saveFile.open(QIODevice::WriteOnly)) {
-        cout << "Can't open fild";
-    }
-
-    QJsonArray array;
-    for (int i = 0; i < listAntenne.size(); i++) {
-
-        array.push_back(listAntenne[i].writeAntenneToJSON());
-    }
-
-    QJsonDocument document = QJsonDocument(array);
-    QJsonDocument saveDoc(document);
-    saveFile.write(saveDoc.toJson());
-    cout << "Successfull" << endl;
-}
-
-vector<Antenne> generateListeAntennes(vector<Hexagone> listHexagones){
-    vector<Antenne> listAntennes;
-    for (int i = 0; i < listHexagones.size(); i++) {
-        if (i%30 == 0) {
-            Point p = Point(listHexagones[i].centre().x(),listHexagones[i].centre().y());
-            int r = rand()%100;
-            int g = rand()%100;
-            int b = rand()%100;
-            Antenne antenne(p.x(), p.y(),"shit", 400, 400, r, g, b);
-            listAntennes.push_back(antenne);
-
-        }
-    }
-
-    return listAntennes;
-}
 

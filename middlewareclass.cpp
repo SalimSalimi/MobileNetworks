@@ -5,6 +5,29 @@ MiddlewareClass::MiddlewareClass(QObject *parent) : QObject(parent) {
 
 }
 
+void MiddlewareClass::saveAntennesToFile(QString filePath)
+{
+    filePath.remove(0,8);
+    filePath.replace("\N","/");
+    QFile saveFile(filePath);
+
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        std::cout << "Can't open file";
+    }
+
+    QJsonArray array;
+    for (int i = 0; i < this->m_listAntenne.size(); i++) {
+
+        array.push_back(this->m_listAntenne[i].writeAntenneToJSON());
+    }
+
+    QJsonDocument document = QJsonDocument(array);
+    QJsonDocument saveDoc(document);
+    saveFile.write(saveDoc.toJson());
+    std::cout << "Successfull" << endl;
+    this->m_listAntenne.clear();
+}
+
 void MiddlewareClass::readAntennesFromFile(QString filePath) {
     filePath.remove(0,8);
     filePath.replace("\N","/");
@@ -28,6 +51,21 @@ void MiddlewareClass::readAntennesFromFile(QString filePath) {
     qWarning("Finish Loading");
     showAntennes(listAntennes);
     this->m_listAntenne = listAntennes;
+}
+
+void MiddlewareClass::constructListAntennes(QVariant puissance, QVariant frequence,
+                                         QVariant coordinateLatitude, QVariant coordinateLongitude,
+                                         QVariant couleur,QVariant nom)
+{
+    QString couleurS = couleur.toString();
+    QColor color(couleurS);
+    int r =  color.red();
+    int b =  color.blue();
+    int g =  color.green();
+    Antenne antenne(coordinateLatitude.toDouble(), coordinateLongitude.toDouble(),
+                    nom.toString().toStdString(),puissance.toDouble(), frequence.toDouble(),
+                    r, g, b);
+    this->m_listAntenne.push_back(antenne);
 }
 
 void MiddlewareClass::setListLongitude(QVariantList listLongitude)
@@ -94,8 +132,8 @@ void MiddlewareClass::showAntennes(QVector<Antenne> listAntenne){
         QGeoCoordinate coordinate;
 
         QColor color;
-        coordinate.setLatitude(listAntenne[i].y());
-        coordinate.setLongitude(listAntenne[i].x());
+        coordinate.setLatitude(listAntenne[i].x());
+        coordinate.setLongitude(listAntenne[i].y());
 
         latitude = coordinate.latitude();
         longitude = coordinate.longitude();

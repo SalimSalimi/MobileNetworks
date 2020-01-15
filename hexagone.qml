@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtLocation 5.6
 import QtPositioning 5.6
-
+import QtQuick.Controls 2.5
 MapPolygon {
     id: marker
     opacity: 0.75
@@ -10,27 +10,37 @@ MapPolygon {
         longitude : 0
     }
     property var antenne
+    property var dialog
+    property var puissanceRecue
     MouseArea{
         id: mouse
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
+        acceptedButtons: "RightButton"
+        hoverEnabled: true
         onClicked: {
-            addAntenne(coordinate.latitude, coordinate.longitude);
-            assignAntenneToHexagone();
+            var component = Qt.createComponent("qrc:///add_antenne_dialog.qml");
+            var dialog = component.createObject(window);
+            dialog.visible = true
+
+            dialog.getCoordinate(coordinate.latitude, coordinate.longitude);
+
         }
+
+    }
+    ToolTip {
+        id: toolTip
+        text: textToolTip()
+        delay: 1000
+        visible: mouse.containsMouse
     }
 
-    function addAntenne(centerLatitude, centerLongitude){
-        var component = Qt.createComponent("qrc:///antenne.qml");
-        var antenne = component.createObject(window);
-
-        var coordinate = QtPositioning.coordinate(centerLatitude, centerLongitude);
-        antenne.coordinate = coordinate;
-        antenne.couleur = "#156593";
-        console.log(antenne.coordinate);
-        listAntennes.push(antenne);
-        map.addMapItem(antenne);
-
+    function textToolTip() {
+        if(this.antenne === undefined){
+            return "Non couvert pas une antenne, cliquez pour en ajouter"
+        } else {
+            return "Zone couverte par l'antenne: " + this.antenne.nom + "\nPuissance reçue " + this.puissanceRecue
+        }
     }
 }
 

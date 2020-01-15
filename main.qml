@@ -2,16 +2,41 @@ import QtQuick 2.0
 import QtQuick.Window 2.0
 import QtQuick.Dialogs 1.0
 import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
 import QtLocation 5.6
 import QtPositioning 5.6
 
-Window {
+
+ApplicationWindow {
     id: window
     width: 512
     height: 512
     visible: true
+    menuBar: MenuBar {
+            id: menu
+            Menu {
+                title: "Fichier"
+                MenuItem {
+                    text: "Importer"
+                    onTriggered: fileDialogImport.visible = true
+                }
+                MenuItem {
+                    text: "Exporter"
+                    onTriggered: {
+                        fileDialogExport.visible = true
+                    }
+                }
+                MenuSeparator { }
+                MenuItem {
+                    text: "Quitter"
+                    onTriggered: Qt.quit()
+                }
+            }
+        }
+
     property var listHexagones: []
     property var listAntennes: []
+
     Plugin {
         id: mapPlugin
         name: "osm"
@@ -28,19 +53,42 @@ Window {
     }
 
     FileDialog {
-        id: fileDialog
-        title: "Please choose a file"
+        id: fileDialogImport
+        title: "Veuillez choisir un fichier"
         folder: shortcuts.home
+        nameFilters: "*.json"
         onAccepted: {
-            console.log("You chose: " + fileDialog.fileUrls)
-            middleware.readAntennesFromFile(fileDialog.fileUrl);
+            middleware.readAntennesFromFile(fileDialogImport.fileUrl);
         }
         onRejected: {
             console.log("Canceled")
         }
-        Component.onCompleted: visible = true
     }
 
+
+    FileDialog {
+        id: fileDialogExport
+        title: "Veuillez choisir un fichier"
+        folder: shortcuts.home
+        selectExisting: false
+        nameFilters: "*.json"
+        onAccepted: {
+            for(var i =0; i < listAntennes.length; i++){
+                middleware.constructListAntennes(listAntennes[i].puissance,
+                                                listAntennes[i].frequence,
+                                                listAntennes[i].coordinate.latitude,
+                                                listAntennes[i].coordinate.longitude,
+                                                listAntennes[i].couleur,
+                                                listAntennes[i].nom);
+            }
+            middleware.saveAntennesToFile(fileDialogExport.fileUrl)
+            console.log(listAntennes.length)
+        }
+        onRejected: {
+            console.log("Canceled")
+        }
+
+    }
 
     function addHexagone(latitude, longitude, r, g, b, centreLong, centreLat){
 
@@ -72,6 +120,7 @@ Window {
             antenne.coordinate = coordinate;
             antenne.puissance = puissance[i];
             antenne.couleur = color[i];
+            antenne.frequence = frequence[i];
             listAntennes.push(antenne);
             map.addMapItem(antenne);
         }
@@ -84,7 +133,7 @@ Window {
         for(var i = 0; i < listHexagones.length; i++){
             var puissanceRecueAncienne = 0;
             for(var j=0; j < listAntennes.length; j++){
-                var puissanceRecue = 400000 / (4 * Math.PI * (listHexagones[i].coordinate.distanceTo(listAntennes[j].coordinate)))*1000;
+                var puissanceRecue = listAntennes[j].puissance / (4 * Math.PI * (listHexagones[i].coordinate.distanceTo(listAntennes[j].coordinate))+0.0005)*1000;
                 if(puissanceRecue > puissanceRecueAncienne){
 
                     puissanceRecueAncienne = puissanceRecue;
@@ -92,14 +141,10 @@ Window {
 
                 }
             }
+            listHexagones[i].antenne = listAntennes[positionAntenne];
             listHexagones[i].color = listAntennes[positionAntenne].couleur;
-            listHexagones[i].opacity = 0.75 * puissanceRecueAncienne / 40000;
-            //console.log("opacity" + listHexagones[i].opacity);
-            //console.log("recu " + i +" " + puissanceRecue + " max: " + 4000 +" position " + positionAntenne);
+            listHexagones[i].opacity = 0.75 * puissanceRecueAncienne / listAntennes[positionAntenne].puissance * 10;
+            listHexagones[i].puissanceRecue = puissanceRecueAncienne
         }
-    }
-
-    function test(){
-        console.log("Tessst");
     }
 }

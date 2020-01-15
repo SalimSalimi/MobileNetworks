@@ -1,4 +1,4 @@
-QT       += core gui quick qml positioning location network
+QT       += core gui quick qml positioning location network quickcontrols2
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets positioning
 
@@ -41,13 +41,15 @@ RESOURCES += \
     main.qml \
     hexagone.qml \
     antenne.qml \
-    marker.png
+    marker.png \
+    add_antenne_dialog.qml
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    add_antenne_dialog.qml \
     antenne.qml \
     hexagone.qml \
     main.qml
