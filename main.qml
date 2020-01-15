@@ -13,26 +13,26 @@ ApplicationWindow {
     height: 512
     visible: true
     menuBar: MenuBar {
-            id: menu
-            Menu {
-                title: "Fichier"
-                MenuItem {
-                    text: "Importer"
-                    onTriggered: fileDialogImport.visible = true
-                }
-                MenuItem {
-                    text: "Exporter"
-                    onTriggered: {
-                        fileDialogExport.visible = true
-                    }
-                }
-                MenuSeparator { }
-                MenuItem {
-                    text: "Quitter"
-                    onTriggered: Qt.quit()
+        id: menu
+        Menu {
+            title: "Fichier"
+            MenuItem {
+                text: "Importer"
+                onTriggered: fileDialogImport.visible = true
+            }
+            MenuItem {
+                text: "Exporter"
+                onTriggered: {
+                    fileDialogExport.visible = true
                 }
             }
+            MenuSeparator { }
+            MenuItem {
+                text: "Quitter"
+                onTriggered: Qt.quit()
+            }
         }
+    }
 
     property var listHexagones: []
     property var listAntennes: []
@@ -75,14 +75,13 @@ ApplicationWindow {
         onAccepted: {
             for(var i =0; i < listAntennes.length; i++){
                 middleware.constructListAntennes(listAntennes[i].puissance,
-                                                listAntennes[i].frequence,
-                                                listAntennes[i].coordinate.latitude,
-                                                listAntennes[i].coordinate.longitude,
-                                                listAntennes[i].couleur,
-                                                listAntennes[i].nom);
+                                                 listAntennes[i].frequence,
+                                                 listAntennes[i].coordinate.latitude,
+                                                 listAntennes[i].coordinate.longitude,
+                                                 listAntennes[i].couleur,
+                                                 listAntennes[i].nom);
             }
             middleware.saveAntennesToFile(fileDialogExport.fileUrl)
-            console.log(listAntennes.length)
         }
         onRejected: {
             console.log("Canceled")
@@ -99,9 +98,10 @@ ApplicationWindow {
         for(var i=0; i < latitude.length; i++){
             var coordinate = QtPositioning.coordinate(latitude[i], longitude[i]);
             polygon.addCoordinate(coordinate);
-            polygon.color =  "#" + r + b+ g;
+            polygon.color =  "#" + r + g+ b;
             polygon.coordinate = centreCoordinate;
             listHexagones.push(polygon);
+            console.log("color" + polygon.color)
         }
         map.addMapItem(polygon);
     }
@@ -131,20 +131,28 @@ ApplicationWindow {
         var puissanceRecueMax;
         var positionAntenne = 0;
         for(var i = 0; i < listHexagones.length; i++){
-            var puissanceRecueAncienne = 0;
-            for(var j=0; j < listAntennes.length; j++){
-                var puissanceRecue = listAntennes[j].puissance / (4 * Math.PI * (listHexagones[i].coordinate.distanceTo(listAntennes[j].coordinate))+0.0005)*1000;
-                if(puissanceRecue > puissanceRecueAncienne){
+            if(listAntennes.length == 0){
+                listHexagones[i].antenne = undefined
+                listHexagones[i].color = "#586036"
+                listHexagones[i].opacity = 0.75
+                listHexagones[i].puissanceRecue = 0
 
-                    puissanceRecueAncienne = puissanceRecue;
-                    positionAntenne = j;
+            } else {
+                var puissanceRecueAncienne = 0;
+                for(var j=0; j < listAntennes.length; j++){
+                    var puissanceRecue = listAntennes[j].puissance / (4 * Math.PI * (listHexagones[i].coordinate.distanceTo(listAntennes[j].coordinate))+0.0005)*1000;
+                    if(puissanceRecue > puissanceRecueAncienne){
+                        puissanceRecueAncienne = puissanceRecue;
+                        positionAntenne = j;
 
+                    }
                 }
+                listHexagones[i].antenne = listAntennes[positionAntenne];
+                listHexagones[i].color = listAntennes[positionAntenne].couleur;
+                listHexagones[i].opacity = 0.75 * puissanceRecueAncienne / listAntennes[positionAntenne].puissance * 10;
+                listHexagones[i].puissanceRecue = puissanceRecueAncienne
             }
-            listHexagones[i].antenne = listAntennes[positionAntenne];
-            listHexagones[i].color = listAntennes[positionAntenne].couleur;
-            listHexagones[i].opacity = 0.75 * puissanceRecueAncienne / listAntennes[positionAntenne].puissance * 10;
-            listHexagones[i].puissanceRecue = puissanceRecueAncienne
+
         }
     }
 }

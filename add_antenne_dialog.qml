@@ -14,6 +14,7 @@ Window {
     property var frequence
     property var nom
     property var coordinate
+    property var label
 
     Rectangle {
         id: rectangle
@@ -31,8 +32,8 @@ Window {
             anchors.fill: parent
 
             Label {
-                id: label
-                text: qsTr("Ajout d'une antenne")
+                id: labelShow
+                text: label
             }
 
             TextField {

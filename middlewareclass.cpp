@@ -125,7 +125,7 @@ void MiddlewareClass::showAntennes(QVector<Antenne> listAntenne){
     QVariantList listPuissance;
     QVariantList listFrequence;
     QVariantList listColor;
-    std::cout << "listAntenne " << listAntenne.size() << std::endl;
+
     for (int i = 0; i < listAntenne.size(); i++) {
         QVariant latitude;
         QVariant longitude;
@@ -147,7 +147,7 @@ void MiddlewareClass::showAntennes(QVector<Antenne> listAntenne){
         listFrequence.push_back(listAntenne[i].frequence());
         listPuissance.push_back(listAntenne[i].puissance());
         listColor.push_back(color);
-       // coordinateList.clear();*/
+
     }
     this->setListLatitude(listLatitude);
     this->setListLongitude(listLongitude);
@@ -155,7 +155,6 @@ void MiddlewareClass::showAntennes(QVector<Antenne> listAntenne){
     this->setListFrequence(listFrequence);
     this->setListColor(listColor);
 
-    qDebug("hehehe %d", listLatitude.size());
     QMetaObject::invokeMethod(this->m_obect, "addAntenne");
 
 }

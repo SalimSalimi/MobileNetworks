@@ -19,12 +19,8 @@ MapPolygon {
         acceptedButtons: "RightButton"
         hoverEnabled: true
         onClicked: {
-            var component = Qt.createComponent("qrc:///add_antenne_dialog.qml");
-            var dialog = component.createObject(window);
+            dialog = showDialogAdd()
             dialog.visible = true
-
-            dialog.getCoordinate(coordinate.latitude, coordinate.longitude);
-
         }
 
     }
@@ -41,6 +37,15 @@ MapPolygon {
         } else {
             return "Zone couverte par l'antenne: " + this.antenne.nom + "\nPuissance reçue " + this.puissanceRecue
         }
+    }
+
+    function showDialogAdd(){
+        var component = Qt.createComponent("qrc:///add_antenne_dialog.qml");
+        var dialog = component.createObject(window);
+        dialog.label = "Ajouter une antenne"
+        dialog.getCoordinate(coordinate.latitude, coordinate.longitude);
+
+        return dialog
     }
 }
 

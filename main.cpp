@@ -22,6 +22,9 @@
 
 using namespace std;
 
+vector<Hexagone> generateHexagones(int);
+void sendHexagonesToQml(QObject* ,vector<Hexagone>);
+
 int main(int argc, char *argv[]){
 
     const int numberOfHexagones = 20;
@@ -38,7 +41,15 @@ int main(int argc, char *argv[]){
     middleware->m_obect = object;
     engine.rootContext()->setContextProperty("middleware", middleware);
 
-    QList<QGeoCoordinate> coordinateList;
+    vector<Hexagone> listHexagones;
+
+    listHexagones = generateHexagones(numberOfHexagones);
+
+    sendHexagonesToQml(object, listHexagones);
+    return app.exec();
+}
+
+vector<Hexagone> generateHexagones(int numberOfHexagones){
 
     vector<Hexagone> listHexagones;
     vector<Hexagone> listHexagonesImpaires;
@@ -64,6 +75,12 @@ int main(int argc, char *argv[]){
         }
 
     }
+    return listHexagones;
+}
+
+void sendHexagonesToQml(QObject* object,vector<Hexagone> listHexagones){
+
+    QList<QGeoCoordinate> coordinateList;
     QVariantList listLongitude;
     QVariantList listLatitude;
 
@@ -92,13 +109,8 @@ int main(int argc, char *argv[]){
                                   Q_ARG(QVariant, QVariant::fromValue(b)),
                                   Q_ARG(QVariant, QVariant::fromValue(listHexagones[i].centre().x())),
                                   Q_ARG(QVariant, QVariant::fromValue(listHexagones[i].centre().y())));
-        //cout << "centre x" <<listHexagones[i].centre().x() << endl;
         listLongitude.clear();
         listLatitude.clear();
         coordinateList.clear();
     }
-
-    return app.exec();
 }
-
-
