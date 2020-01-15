@@ -55,7 +55,7 @@ vector<Hexagone> generateHexagones(int numberOfHexagones){
     vector<Hexagone> listHexagonesImpaires;
     vector<Hexagone> listHeaxgonesPaires;
 
-    listHexagones = remplirPaire(Point(7.3384, 47.746), numberOfHexagones);
+    listHexagones = remplirPaire(Point(7.2675, 47.7839), numberOfHexagones);
     listHexagonesImpaires = remplirImpaire(listHexagones[0], numberOfHexagones);
 
     for (int i = 0; i < listHexagonesImpaires.size(); i++) {

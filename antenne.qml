@@ -61,7 +61,6 @@ MapQuickItem {
         var component = Qt.createComponent("qrc:///add_antenne_dialog.qml");
         var dialog = component.createObject(window);
         var pos = listAntennes.indexOf(this)
-        console.log("pos " + pos)
         dialog.label = "Modifier une antenne"
         dialog.getCoordinate(coordinate.latitude, coordinate.longitude);
 
@@ -78,7 +77,6 @@ MapQuickItem {
         var pos = listAntennes.indexOf(this)
         listAntennes.splice(pos,1)
         parent.removeMapItem(this)
-        console.log(listAntennes.length + " nombre")
         assignAntenneToHexagone()
     }
 }

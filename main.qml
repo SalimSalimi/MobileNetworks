@@ -101,7 +101,6 @@ ApplicationWindow {
             polygon.color =  "#" + r + g+ b;
             polygon.coordinate = centreCoordinate;
             listHexagones.push(polygon);
-            console.log("color" + polygon.color)
         }
         map.addMapItem(polygon);
     }

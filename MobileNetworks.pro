@@ -20,22 +20,16 @@ SOURCES += \
     antenne.cpp \
     hexagone.cpp \
     main.cpp \
-    mainwindow.cpp \
     middlewareclass.cpp \
-    point.cpp \
-    territoire.cpp
+    point.cpp
 
 HEADERS += \
     Utils.h \
     antenne.h \
     hexagone.h \
-    mainwindow.h \
     middlewareclass.h \
-    point.h \
-    territoire.h
+    point.h
 
-FORMS += \
-    mainwindow.ui
 
 RESOURCES += \
     main.qml \
