@@ -47,7 +47,6 @@ MapQuickItem {
             onTriggered: {
                 var dialog = showDialogUpdate();
                 dialog.label = "Modifier une antenne"
-                dialog.antennePos = listAntennes.indexOf(this)
                 dialog.visible = true
             }
         }
@@ -61,11 +60,15 @@ MapQuickItem {
     function showDialogUpdate(){
         var component = Qt.createComponent("qrc:///add_antenne_dialog.qml");
         var dialog = component.createObject(window);
+        var pos = listAntennes.indexOf(this)
+        console.log("pos " + pos)
         dialog.label = "Modifier une antenne"
+        dialog.getCoordinate(coordinate.latitude, coordinate.longitude);
 
         dialog.nom = this.nom
         dialog.frequence = this.frequence
         dialog.puissance = this.puissance
+        dialog.antennePos = pos
         dialog.getCoordinate(coordinate.latitude, coordinate.longitude);
 
         return dialog

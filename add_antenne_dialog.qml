@@ -16,7 +16,6 @@ Window {
     property var nom
     property var coordinate
     property var label
-    property var update
 
     Rectangle {
         id: rectangle
@@ -36,6 +35,12 @@ Window {
             Label {
                 id: labelShow
                 text: label
+            }
+
+            Label {
+                id: positionAntenne
+                text: antennePos
+
             }
 
             TextField {
@@ -76,13 +81,19 @@ Window {
                         assignAntenneToHexagone();
                         addWindow.close()
                     } else if(label == "Modifier une antenne"){
+                        console.log(antennePos)
                         var antenne = listAntennes[antennePos];
                         antenne.nom = txtNom.text
                         antenne.puissance = Number(txtPuissance.text)
                         antenne.frequence = Number(txtFrequence.text)
+                        antenne.couleur = couleur
+                        antenne.coordinate = coordinate;
+                        console.log(couleur)
                         listAntennes[antennePos] = antenne
-                    }
 
+                        assignAntenneToHexagone();
+                        addWindow.close()
+                    }
 
                 }
             }
@@ -119,6 +130,11 @@ Window {
     function getCoordinate(centerLatitude, centerLongitude) {
         var coordinateS = QtPositioning.coordinate(centerLatitude, centerLongitude);
         coordinate = coordinateS;
+    }
+
+    function setPos(pos){
+
+        this.antennePos = pos
     }
 }
 
